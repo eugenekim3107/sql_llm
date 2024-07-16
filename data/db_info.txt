@@ -1,0 +1,11 @@
+Table Name: ref_table
+Schema: {‘company_id’: varchar(255), ‘parent_company_id’: varchar(255), ‘lob_lvl_1’: varchar(255), ‘lob_lvl_2’: varchar(255), ‘lob_lvl_3’: varchar(255)}
+Data Dictionary: {‘company_id’: ‘The unique id for a company (parent or subsidiary company)’, ‘parent_company_id’: ‘The unique parent id for a company’, ‘lob_lvl_1’: ‘The level 1 line of business (1 to 3 lob levels with 1 being the highest)’, ‘lob_lvl_2’: ‘The level 2 line of business (1 to 3 lob levels with 1 being the highest)’, ‘lob_lvl_3’: ‘The level 3 line of business (1 to 3 lob levels with 1 being the highest)’}
+Unique values/range per column (N/A if unknown or id column): {‘company_id’: N/A, ‘parent_company_id’: N/A, ‘lob_lvl_1’: [‘abc’, ‘def’, ‘hij’], ‘lob_lvl_2’: [‘123’, ‘456’, ‘789’], ‘lob_lvl_3’: [‘ab1’, ‘bc2’, ‘ef3’]}
+Specific example instance/row: {‘company_id’: ‘eugenekim’, ‘parent_company_id’: ‘kim’, ‘lob_lvl_1’: ‘abc’, ‘lob_lvl_2’: ‘456’, ‘lob_lvl_3’: ‘bc2’}
+
+Table Name: payments_table
+Schema: {‘date’: varchar(255), ‘company_id’: varchar(255), ‘amount’: float, ‘direction’: varchar(255)}
+Data Dictionary: {‘date’: ‘The payment date in YYYYMMDD string format’, ‘company_id’: ‘The unique id for a company (parent or subsidiary company)’, ‘amount’: ‘The total payment amount in USD’, ‘direction’: ‘The direction of payment (inbound or outbound)’}
+Unique values/range per column (N/A if unknown or id column): {‘date’: ‘between 20220101 and 20240101’, ‘company_id’: N/A, ‘amount’: ‘greater than 0’, ‘direction’: [‘outbound’, ‘inbound’]}
+Specific example instance/row: {‘date’: ‘20231212’, ‘company_id’: ‘joelfuentes’, ‘amount’: 123456, ‘direction’: ‘inbound’}
