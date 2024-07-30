@@ -29,6 +29,8 @@ class Message(BaseModel):
 @app.post("/chat")
 async def chat(message: Message):
     output_message = ""
+    sql_query = ""
+    regenerate_prompt = "Please recreate/adjust the SQL query by interpretating my SQL request differently. Only give me the SQL query string."
 
     # LLM prompting
     user_prompt = message.message
@@ -37,15 +39,32 @@ async def chat(message: Message):
     if re.search(r'\bSELECT\b', model_response["output_message"], re.IGNORECASE) is not None:
         sql_str = model_response["output_message"]
         df_output = read_table(sql_str, db_name)
+        print(sql_str)
+        sql_query = sql_str
 
+        # When the output is empty, ask LLM to reinterperate the user request
         if df_output.shape[0] == 0:
-            output_message = "There are no results for your query. Please try again with a different question."
+            model_response = ask_sqlgenex(model_setup["client"], model_setup["model_name"], regenerate_prompt, model_setup["chat_history"])
+
+            if re.search(r'\bSELECT\b', model_response["output_message"], re.IGNORECASE) is not None:
+                sql_str = model_response["output_message"]
+                df_output = read_table(sql_str, db_name)
+                
+                print(sql_str)
+                sql_query = sql_str
+                if df_output.shape[0] == 0:
+                    output_message = "There are no results for your query. \nPlease try again with a different question."
+                else:
+                    output_message = format_dataframe_tabulate(df_output)
+            else:
+                output_message = model_response["output_message"]
+
         else:
             output_message = format_dataframe_tabulate(df_output)
     else:
         output_message = model_response["output_message"]
 
-    return {"output_message": output_message}
+    return {"output_message": output_message, "sql_query": sql_query}
 
 if __name__ == '__main__':
     uvicorn.run(app, host="0.0.0.0", port=8000)
