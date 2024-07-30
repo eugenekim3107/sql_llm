@@ -17,7 +17,7 @@ document.getElementById('chat-form').addEventListener('submit', function(e) {
     .then(response => response.json())
     .then(data => {
         removeMessage(loadingMessage);
-        addMessage('bot', data.output_message);
+        addMessage('bot', data.output_message, data.sql_query);
         document.getElementById('user-input').disabled = false;
         document.getElementById('user-input').focus();
     })
@@ -30,7 +30,7 @@ document.getElementById('chat-form').addEventListener('submit', function(e) {
     });
 });
 
-function addMessage(sender, message) {
+function addMessage(sender, message, sqlQuery = null) {
     const chatBox = document.getElementById('chat-box');
     const messageElement = document.createElement('div');
     messageElement.classList.add('message', sender);
@@ -39,6 +39,14 @@ function addMessage(sender, message) {
         const preElement = document.createElement('pre');
         preElement.textContent = message;
         messageElement.appendChild(preElement);
+
+        if (sqlQuery) {
+            messageElement.classList.add('clickable');
+            messageElement.setAttribute('data-sql', sqlQuery);
+            messageElement.addEventListener('click', function() {
+                showModal(sqlQuery);
+            });
+        }
     } else {
         messageElement.textContent = message;
     }
@@ -62,3 +70,23 @@ function removeMessage(messageElement) {
     const chatBox = document.getElementById('chat-box');
     chatBox.removeChild(messageElement);
 }
+
+// Modal Functions
+function showModal(sqlQuery) {
+    const modal = document.getElementById("sqlModal");
+    const sqlQueryElement = document.getElementById("sqlQuery");
+    sqlQueryElement.textContent = sqlQuery;
+    modal.style.display = "block";
+}
+
+document.querySelector(".close").addEventListener("click", function() {
+    const modal = document.getElementById("sqlModal");
+    modal.style.display = "none";
+});
+
+window.addEventListener("click", function(event) {
+    const modal = document.getElementById("sqlModal");
+    if (event.target === modal) {
+        modal.style.display = "none";
+    }
+});
