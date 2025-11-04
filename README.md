@@ -2,6 +2,17 @@
 
 SQL GenEx is a chatbot designed to create and execute SQL queries for custom databases. It simplifies the process of retrieving information from multiple tables without requiring users to understand table schemas, data dictionaries, columns, or other database details. This tool is particularly useful for managers and other non-technical users who can obtain the necessary data using natural language queries.
 
+## Demo
+
+![Demo Screenshot](images/demo_screenshot.png)
+
+Watch the demo video to see SQL GenEx in action:
+
+<video width="800" controls>
+  <source src="images/sql_llm_demo.mp4" type="video/mp4">
+  Your browser does not support the video tag. <a href="images/sql_llm_demo.mp4">Download the video</a> instead.
+</video>
+
 ## Prerequisites
 
 ### 1. Create a New Virtual Environment
